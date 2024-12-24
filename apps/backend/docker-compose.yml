@@ -1,0 +1,46 @@
+version: '3.0'
+
+services:
+  main:
+    container_name: main
+    networks:
+      - shared_network
+    build:
+      context: .
+    ports:
+      - "3002:3002"
+    volumes:
+      - ../../:/app
+    command: npm run start:dev
+    depends_on:
+      - postgres
+    restart: always
+  postgres:
+    container_name: postgres
+    image: postgres
+    networks:
+      - shared_network
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: 'root'
+      POSTGRES_DB: 'nest'
+      POSTGRES_PASSWORD: 'root'
+    restart: always
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - shared_network
+    environment:
+      - ADMINER_DEFAULT_SERVER=postgres
+
+volumes:
+  pgdata:
+
+networks:
+  shared_network:
+    external: true
+
