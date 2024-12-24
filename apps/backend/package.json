@@ -1,5 +1,5 @@
 {
-  "name": "@dapp/backend",
+  "name": "@test/backend",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -45,7 +45,6 @@
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
-    "ts-node": "^10.9.2",
     "typeorm": "^0.3.20",
     "viem": "2.21.37",
     "znv": "^0.4.0",
@@ -71,7 +70,6 @@
     "supertest": "^7.0.0",
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.3",
-    "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.3"
   },

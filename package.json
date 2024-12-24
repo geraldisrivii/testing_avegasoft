@@ -8,8 +8,8 @@
   ],
   "packageManager": "yarn@1.22.2",
   "scripts": {
-    "dev:landing": "yarn workspace @dapp/landing dev",
-    "dev:backend": "yarn workspace @dapp/backend docker:start"
+    "dev:landing": "yarn workspace @test/landing dev",
+    "dev:backend": "yarn workspace @test/backend docker:start"
   },
   "dependencies": {
     "pinia": "^2.2.5"
