@@ -1,8 +1,4 @@
-import {
-  CreateUserDTO,
-  SignUpByWalletDTO,
-  UserDTO,
-} from '@internal/dto/dto.user';
+import { CreateUserDTO, LoginUserDTO, UserDTO } from '@internal/dto/dto.user';
 import {
   HttpException,
   Injectable,
@@ -10,34 +6,54 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from '~/users/users.service';
-import { Refresh, User } from '~/users/users.model';
 import { publicClient } from '~/constants/constants.client';
-import { TokenDTO } from '@internal/dto/dto.auth';
+import { AuthDTO, TokenDTO } from '@internal/dto/dto.auth';
 import { Request as RequestExpress } from 'express';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateUser, Refresh, User } from './auth.model';
+import * as bcrypt from 'bcryptjs';
+import { validateToken } from '~/helpers/helpers.auth';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userServise: UsersService,
-    private jwtServise: JwtService,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private jwtService: JwtService,
   ) {}
 
-  async signupByWallet({ address, signature, role }: SignUpByWalletDTO) {
-    const valid = await publicClient.verifyMessage({
-      address,
-      signature,
-      message: 'hello',
+  async createUser(dto: CreateUser): Promise<AuthDTO> {
+    const userExists = await this.userRepository.findOne({
+      where: { email: dto.email },
     });
 
-    if (!valid) {
-      throw new HttpException('Invalid signature', 400);
+    if (userExists) {
+      throw new HttpException('User already exists', 400);
     }
 
-    let user = await this.userServise.getUserByAddressAndRole(address, role);
+    const user = await this.userRepository.save({
+      ...dto,
+      password: bcrypt.hashSync(dto.password),
+    });
+
+    return {
+      user,
+      access: this.generateAccessToken(user),
+      refresh: this.generateRefreshToken(user),
+    };
+  }
+
+  async login(dto: LoginUserDTO): Promise<AuthDTO> {
+    const user = await this.userRepository.findOne({
+      where: { email: dto.email },
+    });
 
     if (!user) {
-      user = await this.userServise.createUser({ address, role });
+      throw new HttpException('User not found', 404);
+    }
+
+    if (!bcrypt.compareSync(dto.password, user.password)) {
+      throw new HttpException('Wrong password', 400);
     }
 
     return {
@@ -47,8 +63,19 @@ export class AuthService {
     };
   }
 
+  getUser(req: RequestExpress) {
+    const token = req.headers.authorization;
+
+    const tokenValue = validateToken(token);
+    try {
+      return this.jwtService.verify<TokenDTO>(tokenValue);
+    } catch {
+      throw new HttpException('Token is expired', 403);
+    }
+  }
+
   private generateAccessToken(user: User) {
-    return this.jwtServise.sign(
+    return this.jwtService.sign(
       {
         user,
         type: 'access',
@@ -60,7 +87,7 @@ export class AuthService {
   }
 
   private generateRefreshToken(user: User) {
-    return this.jwtServise.sign(
+    return this.jwtService.sign(
       {
         user,
         type: 'refresh',
@@ -73,10 +100,10 @@ export class AuthService {
 
   refresh(dto: Refresh) {
     try {
-      const result = this.jwtServise.verify<TokenDTO>(dto.refresh);
-  
+      const result = this.jwtService.verify<TokenDTO>(dto.refresh);
+
       const { user } = result;
-  
+
       return {
         access: this.generateAccessToken(user),
         refresh: this.generateRefreshToken(user),

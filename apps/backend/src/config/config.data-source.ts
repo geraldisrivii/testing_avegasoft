@@ -1,5 +1,4 @@
 import { ConfigService } from '@nestjs/config';
-import { RemoveUserModelEmailProp1730640216750 } from '../migrations/1730640216750-remove-user-model-email-prop';
 import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
@@ -17,6 +16,5 @@ export const source = new DataSource({
   database: config.get('DATABASE_NAME') || 'nest',
   host: config.get('DATABASE_HOST'),
   port: config.get('DATABASE_PORT'),
-  migrations: [RemoveUserModelEmailProp1730640216750],
   synchronize: true,
 });

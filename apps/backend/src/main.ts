@@ -4,9 +4,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { ProjectValidationPipe } from '~/pipes/pipes.validation';
 import { useContainer } from 'class-validator';
-import { RolesAuthGuard } from '~/auth/roles-auth.guard';
-import { JwtService } from '@nestjs/jwt';
-import { AuthGuard } from '~/auth/auth.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,7 +11,7 @@ async function bootstrap() {
   const env = new ConfigService();
 
   const config = new DocumentBuilder()
-    .setTitle('ETH freelance platform API')
+    .setTitle('Testing API')
     .setDescription('API description')
     .setVersion(env.get('APP_VERSION')!)
     .build();

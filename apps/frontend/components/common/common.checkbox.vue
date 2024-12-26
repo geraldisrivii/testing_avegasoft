@@ -3,8 +3,8 @@ export type CommonCheckboxVariant = "primary";
 
 export interface CommonCheckboxProps {
   variant?: CommonCheckboxVariant;
-  label: string;
-  name: string;
+  label?: string;
+  name?: string;
   modelValue?: boolean;
 }
 
@@ -23,10 +23,11 @@ const props = withDefaults(defineProps<CommonCheckboxProps>(), {
       "
       :checked="props.modelValue"
       type="checkbox"
-      :name="name"
+      :name="name ?? ''"
       :id="name"
     />
     <label
+      v-if="label"
       :for="name"
       class="ml-2 uppercase select-none cursor-pointer"
       :class="modelValue ? 'text-blue-dark' : 'text-[#797D91]'"

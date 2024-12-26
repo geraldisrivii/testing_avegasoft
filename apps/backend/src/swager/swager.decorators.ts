@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { object } from 'zod';
 import * as uuid from 'uuid';
 
 export function SwaggerID(description: string = 'Unique identifier') {

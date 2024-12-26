@@ -29,13 +29,16 @@ function onInput(event: Event) {
     <label v-if="label" class="text-blue-dark">{{ label }}</label>
     <div class="relative">
       <input
-        class="input w-full bg-gray-200 rounded-[3.2rem] py-3.5 px-6 min-w-[124px] focus:outline-none"
-        :class="`input_${props.variant}`"
+        :class="[
+          `input_${props.variant} input w-full bg-gray-200`,
+          'rounded-md py-3.5 px-6 min-w-[124px] focus:outline-none',
+          'text-lg',
+        ]"
         :value="props.modelValue"
         :placeholder="placeholder"
         @input="onInput"
       />
-      <slot/>
+      <slot />
     </div>
   </div>
 </template>

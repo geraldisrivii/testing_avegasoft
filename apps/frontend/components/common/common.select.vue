@@ -12,8 +12,10 @@ const props = defineProps<CommonSelectProps>();
 
 <template>
   <div class="flex flex-col relative">
-    <button @click="state = !state" class="label flex items-center gap-2">
-      <span class="text-blue-600 font-medium">{{ label }}</span>
+    <button type="button" @click="state = !state" class="label flex items-center gap-2">
+      <span class="text-blue-600 font-medium">{{
+        modelValue ? modelValue.label : label
+      }}</span>
 
       <icon-wrapper
         class="duration-300"
@@ -28,9 +30,9 @@ const props = defineProps<CommonSelectProps>();
     <transition name="slide">
       <div
         v-show="state"
-        class="absolute z-20 left-[50%] translate-x-[-50%] w-max top-8 bg-white border border-gray-300 rounded-md content"
+        class="absolute z-20 left-[50%] translate-x-[-50%] w-full top-8 bg-white border border-gray-300 rounded-md content"
       >
-        <div class="w-full" v-for="item in items">
+        <div @click="state = false" class="w-full" v-for="item in items">
           <slot name="item" :item="item" />
         </div>
       </div>

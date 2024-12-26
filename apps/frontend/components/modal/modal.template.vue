@@ -19,7 +19,7 @@ const modalTemplateRef = ref();
 const modal = getModalById(modalId.value)!;
 const { state } = modal;
 
-onClickOutside(modalTemplateRef, (e: PointerEvent) => {
+onClickOutside(modalTemplateRef as any, (e: PointerEvent) => {
   if (silenceOutside.value) {
     return;
   }
@@ -64,7 +64,12 @@ defineExpose({
             </icon-wrapper>
           </button>
         </div>
-        <p v-if="title" :class="`font-sherif text-4xl text-blue-600 text-${alignTitle}`">{{ title }}</p>
+        <p
+          v-if="title"
+          :class="`font-sherif text-4xl text-blue-600 text-${alignTitle}`"
+        >
+          {{ title }}
+        </p>
         <slot />
       </div>
       <div v-if="$slots.right">

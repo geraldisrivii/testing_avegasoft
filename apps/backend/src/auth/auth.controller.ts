@@ -1,10 +1,8 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpException, Post } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from '~/auth/auth.service';
-import { Refresh, SignupByWallet } from '~/users/users.model';
-import { Auth } from '~/auth/auth.model';
-import { Request as RequestExpress } from 'express';
-import { AuthGuard } from './auth.guard';
+import { Auth, CreateUser, LoginUser, Refresh } from '~/auth/auth.model';
+import { CreateUserDTO } from '@internal/dto/dto.user';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -12,9 +10,15 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @ApiResponse({ status: 200, type: Auth })
-  @Post('/signup')
-  registartion(@Body() dto: SignupByWallet) {
-    return this.authService.signupByWallet(dto);
+  @Post('/register')
+  register(@Body() dto: CreateUser) {
+    return this.authService.createUser(dto);
+  }
+
+  @ApiResponse({ status: 200, type: Auth })
+  @Post('/login')
+  login(@Body() dto: LoginUser) {
+    return this.authService.login(dto);
   }
 
   @ApiResponse({ status: 200, type: Auth })

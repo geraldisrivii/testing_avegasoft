@@ -1,28 +1,16 @@
-import { Address } from "viem";
-import { RoleDTO } from "./dto.role";
-
-export interface CreateUserDTO {
-  address: string;
-}
-
-export interface SignUpByWalletDTO {
-  address: Address;
-  signature: Address;
-  role: RoleDTO
-}
+import { TaskDTO } from "./dto.task";
 
 export interface UserDTO {
   id: number;
-
   email: string;
-
-  banned: boolean;
-
-  bannedReason: string;
-
-  address: Address;
-
-  role: RoleDTO;
+  password: string;
+  tasks: TaskDTO[]
 }
 
-export interface RelatedUserDTO extends Omit<UserDTO, "roles"> {}
+export interface UserWithoutRelation extends Omit<UserDTO, "tasks"> {}
+
+export interface CreateUserDTO extends Omit<UserDTO, "id" | "tasks"> {}
+
+export interface LoginUserDTO extends Omit<UserDTO, "id" | "tasks"> {}
+
+export interface UpdateUserDTO extends Partial<UserDTO> {}

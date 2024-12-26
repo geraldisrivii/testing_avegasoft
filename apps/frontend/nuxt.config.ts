@@ -1,5 +1,3 @@
-import { useStringTransformer } from "../../internal/vite/plugins/plugin.string-transformer";
-import { useIsolatedAlias } from "../../internal/vite/plugins/plugin.isolated-aliases";
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: { enabled: false },
@@ -7,6 +5,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       DEMO_CONTRACT_ADDRESS: process.env.DEMO_CONTRACT_ADDRESS,
+      API_URL: process.env.SERVER_API_ENDPOINT,
     },
   },
 
@@ -54,10 +53,10 @@ export default defineNuxtConfig({
       preprocessorOptions: {
         scss: {
           additionalData: `
-            @import '~/scss/variables.scss';
-            @import '~/scss/typography/index.scss';
-            @import '~/scss/adaptive/adaptive.create-container.scss';
-            @import '~/scss/adaptive/adaptive.mixins.scss';
+            @use '~/scss/variables.scss' as *;
+            @use '~/scss/typography/index.scss' as *;
+            @use '~/scss/adaptive/adaptive.create-container.scss' as *; 
+            @use '~/scss/adaptive/adaptive.mixins.scss' as *;
           `,
         },
       },
@@ -73,28 +72,11 @@ export default defineNuxtConfig({
         util: "util/",
       },
     },
-    plugins: [
-      useIsolatedAlias({
-        modules: [
-          {
-            name: "Re-worked internal packages",
-            repositoryDirectories: ["dto", "configs", "vite"],
-            workspaceDirectory: "internal",
-          },
-        ],
-        relativePathToProjectRoot: "../../",
-        hasSrc: false,
-      }),
-      useStringTransformer({
-        SERVER_API_ENDPOINT: () => {
-          return process.env.SERVER_API_ENDPOINT;
-        },
-      }),
-    ],
+    plugins: [],
   },
 
   modules: [
-    '@pinia/nuxt',
+    "@pinia/nuxt",
     "@nuxt/image",
     "@nuxtjs/google-fonts",
     "@vee-validate/nuxt",

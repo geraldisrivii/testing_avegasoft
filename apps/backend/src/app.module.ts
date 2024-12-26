@@ -1,22 +1,12 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from './users/users.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { validate } from 'src/config/config.env';
-import { User } from '~/users/users.model';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { source } from '~/config/config.data-source';
-import { JobsModule } from './jobs/jobs.module';
-import { Job } from '~/jobs/jobs.model';
-import { AttachmentsModule } from './attachments/attachments.module';
-import { Attachment } from '~/attachments/attachments.model';
-import { FilesModule } from './files/files.module';
-import { TagsModule } from './tags/tags.module';
-import { Tag } from '~/tags/tag.model';
-import { CategoryModule } from './category/category.module';
-import { Category } from './category/category.model';
-
-const config = new ConfigService();
+import { User } from './auth/auth.model';
+import { Task } from '~/tasks/tasks.model';
+import { TasksModule } from '~/tasks/tasks.module';
 
 @Module({
   imports: [
@@ -26,15 +16,10 @@ const config = new ConfigService();
     }),
     TypeOrmModule.forRoot({
       ...source.options,
-      entities: [User, Job, Attachment, Tag, Category],
+      entities: [User, Task],
     }),
-    UsersModule,
     AuthModule,
-    JobsModule,
-    AttachmentsModule,
-    FilesModule,
-    TagsModule,
-    CategoryModule,
+    TasksModule,
   ],
   controllers: [],
 })

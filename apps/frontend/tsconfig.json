@@ -1,10 +1,11 @@
 {
   // https://nuxt.com/docs/guide/concepts/typescript
-  "extends": "../../.nuxt/tsconfig.json",
+  "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "node",
+    "strict": true,
     "paths": {
       "@dapp/*": ["../../internal/*"],
       "~/*": ["./*"]
@@ -13,17 +14,17 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
   "references": [
     {
       "path": "../../internal/dto"
-    },
-    {
-      "path": "../../internal/configs"
-    },
-    {
-      "path": "../../internal/vite"
     }
-  ]
+    // {
+    //   "path": "../../internal/vite"
+    // }
+  ],
+  "files": ["./**/*"]
 }
