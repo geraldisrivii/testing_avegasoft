@@ -3,8 +3,6 @@ version: '3.0'
 services:
   main:
     container_name: main
-    networks:
-      - shared_network
     build:
       context: .
     ports:
@@ -18,8 +16,6 @@ services:
   postgres:
     container_name: postgres
     image: postgres
-    networks:
-      - shared_network
     ports:
       - "5432:5432"
     environment:
@@ -32,15 +28,9 @@ services:
     restart: always
     ports:
       - "8080:8080"
-    networks:
-      - shared_network
     environment:
       - ADMINER_DEFAULT_SERVER=postgres
 
 volumes:
   pgdata:
-
-networks:
-  shared_network:
-    external: true
 
