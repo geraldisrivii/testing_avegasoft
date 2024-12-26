@@ -8,12 +8,12 @@
   >
     <div class="flex items-center gap-3">
       <common-checkbox
-        :model-value="status === TaskStatus.ACTIVE"
+        :model-value="status === TaskStatus.COMPLETED"
         @update:modelValue="
           (value) =>
             emit(
               'update:status',
-              value ? TaskStatus.ACTIVE : TaskStatus.COMPLETED
+              value ? TaskStatus.COMPLETED : TaskStatus.ACTIVE
             )
         "
       />
