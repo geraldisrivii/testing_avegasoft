@@ -11,9 +11,10 @@ export default defineNuxtRouteMiddleware((to, from) => {
     nuxtApp.hooks.hook("app:mounted", () => {
       if (!authStore.isAuth() && to.path !== "/register") {
         router.push("/account/register");
+        return;
       }
 
-      authStore.saveAuth(JSON.parse(localStorage.getItem("auth") || "{}"));
+      authStore.saveAuth(JSON.parse(localStorage.getItem("auth") as string));
     });
   }
 

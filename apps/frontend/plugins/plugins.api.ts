@@ -20,10 +20,6 @@ export default defineNuxtPlugin((NuxtApp) => {
     retry: 2,
     onRequest({ options }) {
       const token = authStore.authData?.access;
-      if (!token) {
-        navigateTo("account/login");
-      }
-
       options.headers.set(`Authorization`, `Bearer ${token}`);
     },
 
